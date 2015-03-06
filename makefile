@@ -7,7 +7,7 @@ installed=tmp/installed.txt
 # compile itext Merge
 CLASSPATH="tmp/itext/itextpdf-5.5.5.jar"
 
-jc=javac -cp .:$(CLASSPATH)
+jc=javac -cp .:$(CLASSPATH) -Xlint:deprecation
 j=java -cp .:$(CLASSPATH)
 
 
@@ -19,6 +19,7 @@ test: install Merge.class
 	time $(j) Merge $(files) tmp/output_itext.pdf
 	time qpdf --empty tmp/output_qpdf.pdf --pages $(files) 1-z --
 	echo "ghostscript is really slow" # time gs -o tmp/output_gs.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress $(files)
+	ruby check_page.rb
 
 install: $(installed)
 

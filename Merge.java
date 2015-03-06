@@ -16,25 +16,18 @@ public class Merge {
 
         String[] files = Arrays.copyOfRange(args, 1, args.length-1);
         String result = args[args.length-1];
-        
+
         Document document = new Document();
         PdfCopy copy = new PdfCopy(document, new FileOutputStream(result));
         document.open();
-        PdfReader reader;
         
-        int n;
-        // loop over the documents you want to merge
         for (int i = 0; i < files.length; i++) {
-            reader = new PdfReader(files[i]);
-            // loop over the pages in that document
-            n = reader.getNumberOfPages();
-            for (int page = 0; page < n; ) {
-                copy.addPage(copy.getImportedPage(reader, ++page));
-            }
+            PdfReader reader = new PdfReader(files[i]);
+            copy.addDocument(reader);
             copy.freeReader(reader);
             reader.close();
         }
-        // step 5
         document.close();
+        copy.close();
     }
 }
